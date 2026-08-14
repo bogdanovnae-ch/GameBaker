@@ -3,17 +3,7 @@ import { Game } from './game/Game.js';
 import { Renderer } from './ui/Renderer.js';
 import { UI } from './ui/UI.js';
 import { Controls } from './ui/Controls.js';
-
-function isDesktop() {
-  const finePointer = window.matchMedia('(pointer: fine)').matches;
-  const canHover = window.matchMedia('(hover: hover)').matches;
-  const noTouch = navigator.maxTouchPoints === 0;
-  return finePointer || canHover || noTouch;
-}
-
-function applyDeviceClass() {
-  document.documentElement.classList.toggle('is-desktop', isDesktop());
-}
+import { watchOrientation } from './ui/orientation.js';
 
 function preventScroll() {
   document.addEventListener(
@@ -27,7 +17,6 @@ function preventScroll() {
 }
 
 async function boot() {
-  applyDeviceClass();
   preventScroll();
   await loadSprites();
 
@@ -40,6 +29,8 @@ async function boot() {
   new Controls(game);
   game.boot();
   if (window.__pendingStart) game.start();
+
+  watchOrientation(() => renderer.fit());
 }
 
 boot().catch((error) => {
