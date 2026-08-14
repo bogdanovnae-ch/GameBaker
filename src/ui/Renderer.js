@@ -12,15 +12,22 @@ export class Renderer {
     this.dpr = 1;
     this.fit();
     window.addEventListener('resize', () => this.fit());
+    window.visualViewport?.addEventListener('resize', () => this.fit());
   }
 
   fit() {
     const parent = this.canvas.parentElement;
-    const maxW = parent?.clientWidth || window.innerWidth;
-    const maxH = parent?.clientHeight || window.innerHeight;
+    const vv = window.visualViewport;
+    const phone = !document.documentElement.classList.contains('is-desktop');
+    const maxW = phone
+      ? Math.round(vv?.width || window.innerWidth)
+      : parent?.clientWidth || window.innerWidth;
+    const maxH = phone
+      ? Math.round(vv?.height || window.innerHeight)
+      : parent?.clientHeight || window.innerHeight;
     const scale = Math.min(maxW / WORLD.width, maxH / WORLD.height);
-    const cssW = Math.floor(WORLD.width * scale);
-    const cssH = Math.floor(WORLD.height * scale);
+    const cssW = Math.max(1, Math.floor(WORLD.width * scale));
+    const cssH = Math.max(1, Math.floor(WORLD.height * scale));
 
     this.dpr = Math.min(window.devicePixelRatio || 1, 2);
     this.canvas.style.width = `${cssW}px`;

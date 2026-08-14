@@ -34,6 +34,7 @@ export function syncOrientation(onReady) {
     onReady();
     requestAnimationFrame(onReady);
     setTimeout(onReady, 250);
+    setTimeout(onReady, 700);
   }
 }
 
