@@ -1,0 +1,9 @@
+{
+  "name": "baker-catches-desserts",
+  "private": true,
+  "type": "module",
+  "description": "Browser arcade game inspired by Wolf catching eggs",
+  "scripts": {
+    "start": "npx --yes serve -p 4173 ."
+  }
+}
