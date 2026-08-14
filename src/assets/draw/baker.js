@@ -169,20 +169,57 @@ function drawHead(ctx) {
 }
 
 function drawHat(ctx) {
+  ctx.save();
+
+  ctx.beginPath();
+  ctx.moveTo(-22, -50);
+  ctx.bezierCurveTo(-36, -56, -40, -76, -24, -88);
+  ctx.bezierCurveTo(-28, -102, -10, -112, 0, -100);
+  ctx.bezierCurveTo(8, -114, 30, -108, 26, -90);
+  ctx.bezierCurveTo(42, -82, 38, -56, 22, -50);
+  ctx.closePath();
+  ctx.fillStyle = '#fffdf8';
+  ctx.fill();
+  ctx.strokeStyle = '#cfc6b8';
+  ctx.lineWidth = 2.2;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+  ctx.beginPath();
+  ctx.ellipse(-9, -84, 11, 8, -0.35, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(10, -90, 10, 8, 0.25, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(2, -76, 8, 6, 0.1, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = 'rgba(170, 158, 145, 0.4)';
+  ctx.lineWidth = 1.6;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(-10, -52);
+  ctx.quadraticCurveTo(-14, -70, -6, -92);
+  ctx.moveTo(2, -52);
+  ctx.quadraticCurveTo(0, -74, 4, -98);
+  ctx.moveTo(12, -52);
+  ctx.quadraticCurveTo(16, -70, 12, -88);
+  ctx.stroke();
+
+  roundRect(ctx, -27, -56, 54, 16, 8);
   ctx.fillStyle = '#ffffff';
-  ctx.strokeStyle = '#d7d0c4';
-  ctx.lineWidth = 2;
-  roundRect(ctx, -22, -58, 44, 14, 6);
   ctx.fill();
+  ctx.strokeStyle = '#cfc6b8';
+  ctx.lineWidth = 2.2;
   ctx.stroke();
-  ctx.beginPath();
-  ctx.ellipse(0, -70, 20, 18, 0, 0, Math.PI * 2);
+
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+  roundRect(ctx, -20, -53, 20, 5, 3);
   ctx.fill();
-  ctx.stroke();
-  ctx.fillStyle = '#fff';
-  ctx.beginPath();
-  ctx.ellipse(-6, -76, 8, 7, 0, 0, Math.PI * 2);
-  ctx.fill();
+
+  ctx.restore();
 }
 
 function drawCatchingArm(ctx, x, y, basketX, basketY, facing, scale, poseHeight, lean) {
