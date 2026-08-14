@@ -16,49 +16,10 @@
       href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/main.css?v=iphone3" />
-    <script>
-      (function () {
-        function isPhone() {
-          return navigator.maxTouchPoints > 0 && Math.min(screen.width, screen.height) <= 920;
-        }
-        function isLandscape() {
-          var w = (window.visualViewport && window.visualViewport.width) || window.innerWidth;
-          var h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
-          if (w > h) return true;
-          if (window.matchMedia('(orientation: landscape)').matches) return true;
-          if (typeof window.orientation === 'number' && Math.abs(window.orientation) === 90) return true;
-          return false;
-        }
-        function sync() {
-          var need = isPhone() && !isLandscape();
-          document.documentElement.classList.toggle('need-rotate', need);
-          document.documentElement.classList.toggle('is-desktop', !isPhone());
-        }
-        sync();
-        window.addEventListener('orientationchange', function () {
-          sync();
-          setTimeout(sync, 100);
-          setTimeout(sync, 400);
-          setTimeout(sync, 800);
-        });
-        window.addEventListener('resize', sync);
-        var mq = window.matchMedia('(orientation: landscape)');
-        if (mq.addEventListener) mq.addEventListener('change', sync);
-        else if (mq.addListener) mq.addListener(sync);
-      })();
-    </script>
+    <link rel="stylesheet" href="css/main.css?v=iphone4" />
   </head>
   <body>
-    <div id="rotate-overlay" aria-live="polite">
-      <div class="rotate-card">
-        <div class="rotate-icon">↔</div>
-        <p>Поверните телефон горизонтально</p>
-        <button id="open-game-btn" class="primary-btn" type="button">Открыть игру</button>
-      </div>
-    </div>
-
-    <div id="app">
+    <div id="app" data-state="start">
       <header id="hud">
         <div class="hud-group score-box">
           <span class="hud-label">Счёт</span>
@@ -167,7 +128,7 @@
       </section>
     </div>
 
-    <script type="module" src="src/main.js?v=iphone3"></script>
+    <script type="module" src="src/main.js?v=iphone4"></script>
     <script>
       window.__pendingStart = false;
       function tapStart(event) {
@@ -186,9 +147,6 @@
       }
       bindTap('play-btn', tapStart);
       bindTap('retry-btn', tapStart);
-      bindTap('open-game-btn', function () {
-        document.documentElement.classList.remove('need-rotate');
-      });
     </script>
   </body>
 </html>

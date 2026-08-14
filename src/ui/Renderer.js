@@ -17,14 +17,8 @@ export class Renderer {
 
   fit() {
     const parent = this.canvas.parentElement;
-    const vv = window.visualViewport;
-    const phone = !document.documentElement.classList.contains('is-desktop');
-    const maxW = phone
-      ? Math.round(vv?.width || window.innerWidth)
-      : parent?.clientWidth || window.innerWidth;
-    const maxH = phone
-      ? Math.round(vv?.height || window.innerHeight)
-      : parent?.clientHeight || window.innerHeight;
+    const maxW = parent?.clientWidth || window.innerWidth;
+    const maxH = parent?.clientHeight || window.innerHeight;
     const scale = Math.min(maxW / WORLD.width, maxH / WORLD.height);
     const cssW = Math.max(1, Math.floor(WORLD.width * scale));
     const cssH = Math.max(1, Math.floor(WORLD.height * scale));
