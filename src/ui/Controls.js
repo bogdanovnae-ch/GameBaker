@@ -49,9 +49,21 @@ export class Controls {
   }
 
   _bindScreens() {
-    document.getElementById('play-btn')?.addEventListener('click', () => this.game.start());
-    document.getElementById('retry-btn')?.addEventListener('click', () => this.game.start());
-    document.getElementById('pause-btn')?.addEventListener('click', () => this.game.togglePause());
-    document.getElementById('resume-btn')?.addEventListener('click', () => this.game.togglePause());
+    const bindTap = (id, handler) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      let last = 0;
+      const fire = (event) => {
+        event.preventDefault();
+        const now = Date.now();
+        if (now - last < 400) return;
+        last = now;
+        handler();
+      };
+      el.addEventListener('pointerup', fire);
+      el.addEventListener('click', fire);
+    };
+    bindTap('pause-btn', () => this.game.togglePause());
+    bindTap('resume-btn', () => this.game.togglePause());
   }
 }

@@ -16,41 +16,36 @@
       href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/main.css?v=iphone2" />
     <script>
       (function () {
         function isPhone() {
-          var touch = navigator.maxTouchPoints > 0;
-          var shortSide = Math.min(screen.width, screen.height);
-          return touch && shortSide <= 920;
+          return navigator.maxTouchPoints > 0 && Math.min(screen.width, screen.height) <= 920;
         }
-        function isPortrait() {
-          var type = screen.orientation && screen.orientation.type;
-          if (type) return type.indexOf('portrait') === 0;
-          if (typeof window.orientation === 'number') {
-            return window.orientation === 0 || window.orientation === 180;
-          }
-          return window.innerHeight > window.innerWidth;
+        function isLandscape() {
+          var w = (window.visualViewport && window.visualViewport.width) || window.innerWidth;
+          var h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+          if (w > h) return true;
+          if (window.matchMedia('(orientation: landscape)').matches) return true;
+          if (typeof window.orientation === 'number' && Math.abs(window.orientation) === 90) return true;
+          return false;
         }
         function sync() {
-          var need = isPhone() && isPortrait();
+          var need = isPhone() && !isLandscape();
           document.documentElement.classList.toggle('need-rotate', need);
           document.documentElement.classList.toggle('is-desktop', !isPhone());
-          var overlay = document.getElementById('rotate-overlay');
-          var app = document.getElementById('app');
-          if (overlay) overlay.hidden = !need;
-          if (app) app.hidden = need;
         }
         sync();
         window.addEventListener('orientationchange', function () {
           sync();
-          setTimeout(sync, 80);
-          setTimeout(sync, 320);
+          setTimeout(sync, 100);
+          setTimeout(sync, 400);
+          setTimeout(sync, 800);
         });
         window.addEventListener('resize', sync);
-        if (screen.orientation && screen.orientation.addEventListener) {
-          screen.orientation.addEventListener('change', sync);
-        }
+        var mq = window.matchMedia('(orientation: landscape)');
+        if (mq.addEventListener) mq.addEventListener('change', sync);
+        else if (mq.addListener) mq.addListener(sync);
       })();
     </script>
   </head>
@@ -59,6 +54,7 @@
       <div class="rotate-card">
         <div class="rotate-icon">↔</div>
         <p>Поверните телефон горизонтально</p>
+        <button id="open-game-btn" class="primary-btn" type="button">Открыть игру</button>
       </div>
     </div>
 
@@ -171,16 +167,27 @@
       </section>
     </div>
 
-    <script type="module" src="src/main.js"></script>
+    <script type="module" src="src/main.js?v=iphone2"></script>
     <script>
       window.__pendingStart = false;
-      document.getElementById('play-btn').addEventListener('click', function () {
+      function tapStart(event) {
+        if (event) event.preventDefault();
+        if (tapStart._busy) return;
+        tapStart._busy = true;
+        setTimeout(function () { tapStart._busy = false; }, 400);
         if (typeof window.startGame === 'function') window.startGame();
         else window.__pendingStart = true;
-      });
-      document.getElementById('retry-btn').addEventListener('click', function () {
-        if (typeof window.startGame === 'function') window.startGame();
-        else window.__pendingStart = true;
+      }
+      function bindTap(id, handler) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('pointerup', handler);
+        el.addEventListener('click', handler);
+      }
+      bindTap('play-btn', tapStart);
+      bindTap('retry-btn', tapStart);
+      bindTap('open-game-btn', function () {
+        document.documentElement.classList.remove('need-rotate');
       });
     </script>
   </body>

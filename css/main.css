@@ -22,7 +22,7 @@ body {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  touch-action: none;
+  touch-action: manipulation;
   background: #5a3218;
   font-family: Fredoka, Nunito, "Trebuchet MS", sans-serif;
   color: var(--ink);
@@ -61,6 +61,7 @@ body {
   font-size: 24px;
   font-weight: 700;
   color: var(--chocolate);
+  margin-bottom: 18px;
 }
 
 html.need-rotate #rotate-overlay {
@@ -274,6 +275,15 @@ h2 {
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.primary-btn,
+.icon-btn,
+.ctrl-btn {
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .primary-btn {
