@@ -40,9 +40,11 @@ export class UI {
   }
 
   _renderLives(lives) {
+    const icon =
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-6.7-4.35-9.33-8.1C.4 9.9 1.15 5.8 4.6 4.35 6.7 3.45 9.05 4.1 12 6.4c2.95-2.3 5.3-2.95 7.4-2.05 3.45 1.45 4.2 5.55 1.93 8.55C18.7 16.65 12 21 12 21z"/></svg>';
     const hearts = [0, 1, 2].map((i) => {
       const on = i < lives;
-      return `<span class="heart ${on ? 'on' : 'off'}" aria-hidden="true">❤</span>`;
+      return `<span class="heart ${on ? 'on' : 'off'}">${icon}</span>`;
     });
     this.livesEl.innerHTML = hearts.join('');
     this.livesEl.setAttribute('aria-label', `Жизни: ${lives}`);

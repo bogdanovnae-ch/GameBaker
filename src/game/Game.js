@@ -191,6 +191,7 @@ export class Game {
     this.audio.play('lifeLost');
     this.ui.flashHurt(!usesTouchControls());
     hapticLifeLost();
+    this.ui.sync(this);
     if (this.lives <= 0) this._gameOver();
   }
 
