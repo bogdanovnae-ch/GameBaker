@@ -3,36 +3,46 @@ import { Game } from './game/Game.js';
 import { Renderer } from './ui/Renderer.js';
 import { UI } from './ui/UI.js';
 import { Controls } from './ui/Controls.js';
-import { watchOrientation } from './ui/orientation.js';
+import { watchViewport } from './ui/viewport.js';
+import { preventPageScroll } from './ui/input.js';
 
-function preventScroll() {
-  document.addEventListener(
-    'touchmove',
-    (event) => {
-      if (event.target.closest('button')) return;
-      event.preventDefault();
-    },
-    { passive: false },
-  );
+function showBootError(error) {
+  const title = document.querySelector('#start-screen h1');
+  const button = document.getElementById('play-btn');
+  if (title) title.textContent = 'Не удалось загрузить игру';
+  if (button) {
+    button.textContent = 'Обновите страницу';
+    button.onclick = function () {
+      window.location.reload();
+    };
+  }
+  console.error(error);
 }
 
 async function boot() {
-  preventScroll();
-  await loadSprites();
+  preventPageScroll();
 
   const canvas = document.getElementById('game-canvas');
+  if (!canvas || !canvas.getContext || !canvas.getContext('2d')) {
+    throw new Error('Canvas is not supported');
+  }
+
+  await loadSprites();
+
   const renderer = new Renderer(canvas);
   const ui = new UI();
-  const game = new Game({ renderer, ui });
+  const game = new Game({ renderer: renderer, ui: ui });
   window.__game = game;
-  window.startGame = () => game.start();
+  window.startGame = function () {
+    game.start();
+  };
   new Controls(game);
   game.boot();
   if (window.__pendingStart) game.start();
 
-  watchOrientation(() => renderer.fit());
+  watchViewport(function () {
+    renderer.fit();
+  });
 }
 
-boot().catch((error) => {
-  console.error(error);
-});
+boot().catch(showBootError);

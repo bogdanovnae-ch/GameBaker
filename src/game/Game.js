@@ -33,6 +33,7 @@ export class Game {
     this.ui.sync(this);
     this.lastTime = performance.now();
     this.raf = requestAnimationFrame((t) => this._tick(t));
+    this._relayout();
   }
 
   start() {
@@ -49,6 +50,7 @@ export class Game {
     this.lastTime = performance.now();
     this.audio.startMusic();
     this.ui.sync(this);
+    this._relayout();
   }
 
   togglePause() {
@@ -56,6 +58,7 @@ export class Game {
       this.state = GAME_STATES.PAUSED;
       this.controlsEnabled = false;
       this.ui.sync(this);
+      this._relayout();
       return;
     }
     if (this.state === GAME_STATES.PAUSED) {
@@ -63,7 +66,18 @@ export class Game {
       this.controlsEnabled = true;
       this.lastTime = performance.now();
       this.ui.sync(this);
+      this._relayout();
     }
+  }
+
+  _relayout() {
+    const renderer = this.renderer;
+    requestAnimationFrame(function () {
+      renderer.fit();
+      requestAnimationFrame(function () {
+        renderer.fit();
+      });
+    });
   }
 
   input(positionId) {
@@ -159,6 +173,7 @@ export class Game {
     this.audio.stopMusic();
     this.audio.play('gameOver');
     this.ui.sync(this);
+    this._relayout();
   }
 
   _burst(x, y, colors) {

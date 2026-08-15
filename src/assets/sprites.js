@@ -21,7 +21,7 @@ export async function loadSprites() {
   const jobs = [];
 
   const loadOne = (entry) => {
-    if (!entry?.src) return;
+    if (!entry || !entry.src) return;
     jobs.push(
       new Promise((resolve) => {
         const img = new Image();
@@ -45,5 +45,6 @@ export async function loadSprites() {
 }
 
 export function getDessertSprite(id) {
-  return SPRITES.desserts[id]?.image ?? null;
+  const dessert = SPRITES.desserts[id];
+  return dessert && dessert.image ? dessert.image : null;
 }

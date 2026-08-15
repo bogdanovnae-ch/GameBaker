@@ -1,4 +1,5 @@
 import { positionFromKeyEvent } from '../config/controls.js';
+import { bindPress, bindTap } from './input.js';
 
 export class Controls {
   constructor(game) {
@@ -39,31 +40,17 @@ export class Controls {
   }
 
   _bindButtons() {
-    document.querySelectorAll('[data-pos]').forEach((button) => {
-      const fire = (event) => {
-        event.preventDefault();
+    const buttons = document.querySelectorAll('[data-pos]');
+    for (let i = 0; i < buttons.length; i += 1) {
+      const button = buttons[i];
+      bindPress(button, function () {
         this.game.input(button.dataset.pos);
-      };
-      button.addEventListener('pointerdown', fire);
-    });
+      }.bind(this));
+    }
   }
 
   _bindScreens() {
-    const bindTap = (id, handler) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      let last = 0;
-      const fire = (event) => {
-        event.preventDefault();
-        const now = Date.now();
-        if (now - last < 400) return;
-        last = now;
-        handler();
-      };
-      el.addEventListener('pointerup', fire);
-      el.addEventListener('click', fire);
-    };
-    bindTap('pause-btn', () => this.game.togglePause());
-    bindTap('resume-btn', () => this.game.togglePause());
+    bindTap(document.getElementById('pause-btn'), () => this.game.togglePause());
+    bindTap(document.getElementById('resume-btn'), () => this.game.togglePause());
   }
 }

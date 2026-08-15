@@ -20,8 +20,9 @@ html,
 body {
   width: 100%;
   height: 100%;
-  height: 100svh;
-  height: 100dvh;
+  height: 100vh;
+  width: var(--app-width, 100%);
+  height: var(--app-height, 100vh);
   overflow: hidden;
   overscroll-behavior: none;
   touch-action: manipulation;
@@ -35,10 +36,12 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100dvh;
-  max-height: 100dvh;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
-    env(safe-area-inset-left);
+  height: 100%;
+  height: 100vh;
+  height: var(--app-height, 100%);
+  max-height: none;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
   background:
     radial-gradient(circle at 20% 20%, #f4d7a0 0%, transparent 40%),
     radial-gradient(circle at 80% 80%, #e7b07a 0%, transparent 45%),
@@ -48,9 +51,9 @@ body {
 #hud {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: clamp(4px, 1.5vw, 16px);
   min-height: 44px;
-  padding: 6px 12px;
+  padding: 6px 8px;
   flex-shrink: 0;
   z-index: 3;
 }
@@ -77,7 +80,7 @@ body {
 #level-value,
 #final-score {
   font-family: "Press Start 2P", monospace;
-  font-size: 16px;
+  font-size: clamp(10px, 2.4vw, 16px);
 }
 
 .lives {
@@ -102,6 +105,8 @@ body {
   cursor: pointer;
   border: 3px solid var(--chocolate);
   box-shadow: 0 4px 0 #4a2a12;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .icon-btn {
@@ -140,6 +145,7 @@ body {
   box-shadow: 0 8px 0 #4a2a12;
   max-width: 100%;
   max-height: 100%;
+  touch-action: none;
 }
 
 #mobile-controls {
@@ -147,8 +153,14 @@ body {
   flex-shrink: 0;
   justify-content: space-between;
   align-items: stretch;
-  padding: 8px 16px 10px;
+  width: 100%;
+  padding: 8px 12px 10px;
   z-index: 3;
+}
+
+#app[data-state="playing"] #mobile-controls,
+#app[data-state="paused"] #mobile-controls {
+  display: flex;
 }
 
 .ctrl-hand {
@@ -159,7 +171,11 @@ body {
 
 .ctrl-btn {
   width: 72px;
-  height: 64px;
+  height: 56px;
+  width: min(22vw, 88px);
+  height: min(14vh, 64px);
+  min-width: 56px;
+  min-height: 48px;
   border-radius: 16px;
   background: #fff4dc;
   color: var(--chocolate);
@@ -263,22 +279,6 @@ h2 {
   color: var(--chocolate);
 }
 
-@media (pointer: coarse) and (hover: none) {
-  #app[data-state="playing"] #mobile-controls,
-  #app[data-state="paused"] #mobile-controls {
-    display: flex;
-  }
-
-  .ctrl-btn {
-    width: 22vw;
-    max-width: 96px;
-    min-width: 64px;
-    height: 16vw;
-    max-height: 72px;
-    min-height: 52px;
-  }
-}
-
 @media (max-height: 430px) {
   #hud {
     min-height: 36px;
@@ -289,13 +289,9 @@ h2 {
     padding: 2px 8px;
   }
 
-  #score-value,
-  #level-value {
-    font-size: 13px;
-  }
-
   .ctrl-btn {
-    height: 52px;
+    height: 48px;
+    min-height: 44px;
     font-size: 26px;
   }
 }

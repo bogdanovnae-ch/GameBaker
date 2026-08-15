@@ -1,9 +1,11 @@
 import { WORLD } from '../config/constants.js';
+import { DISPLAY } from '../config/display.js';
 import { PLAYER_POSES } from '../config/positions.js';
 import { SPRITES, getDessertSprite } from '../assets/sprites.js';
 import { drawBackground, drawCatchSlots, drawChutes } from '../assets/draw/scene.js';
 import { drawBaker } from '../assets/draw/baker.js';
 import { drawDessert } from '../assets/draw/desserts.js';
+import { applyViewport } from './viewport.js';
 
 export class Renderer {
   constructor(canvas) {
@@ -12,18 +14,22 @@ export class Renderer {
     this.dpr = 1;
     this.fit();
     window.addEventListener('resize', () => this.fit());
-    window.visualViewport?.addEventListener('resize', () => this.fit());
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', () => this.fit());
+    }
   }
 
   fit() {
+    applyViewport();
     const parent = this.canvas.parentElement;
-    const maxW = parent?.clientWidth || window.innerWidth;
-    const maxH = parent?.clientHeight || window.innerHeight;
+    const rect = parent && parent.getBoundingClientRect ? parent.getBoundingClientRect() : null;
+    const maxW = (rect && rect.width) || window.innerWidth || 320;
+    const maxH = (rect && rect.height) || window.innerHeight || 180;
     const scale = Math.min(maxW / WORLD.width, maxH / WORLD.height);
-    const cssW = Math.max(1, Math.floor(WORLD.width * scale));
-    const cssH = Math.max(1, Math.floor(WORLD.height * scale));
+    const cssW = Math.max(DISPLAY.minCanvas, Math.floor(WORLD.width * scale));
+    const cssH = Math.max(DISPLAY.minCanvas, Math.floor(WORLD.height * scale));
 
-    this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+    this.dpr = Math.min(window.devicePixelRatio || 1, DISPLAY.maxDpr);
     this.canvas.style.width = `${cssW}px`;
     this.canvas.style.height = `${cssH}px`;
     this.canvas.width = Math.floor(WORLD.width * this.dpr);

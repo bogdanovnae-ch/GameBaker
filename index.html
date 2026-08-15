@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -16,7 +16,20 @@
       href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/main.css?v=iphone4" />
+    <link rel="stylesheet" href="css/main.css?v=all1" />
+    <script>
+      (function () {
+        var w = window.innerWidth || 320;
+        var h = window.innerHeight || 480;
+        if (window.visualViewport) {
+          if (window.visualViewport.width) w = window.visualViewport.width;
+          if (window.visualViewport.height) h = window.visualViewport.height;
+        }
+        var root = document.documentElement;
+        root.style.setProperty('--app-width', Math.round(w) + 'px');
+        root.style.setProperty('--app-height', Math.round(h) + 'px');
+      })();
+    </script>
   </head>
   <body>
     <div id="app" data-state="start">
@@ -128,25 +141,30 @@
       </section>
     </div>
 
-    <script type="module" src="src/main.js?v=iphone4"></script>
+    <script type="module" src="src/main.js?v=all1"></script>
+    <script nomodule>
+      document.getElementById('play-btn').textContent = 'Нужен новый браузер';
+    </script>
     <script>
       window.__pendingStart = false;
-      function tapStart(event) {
-        if (event) event.preventDefault();
+      function tapStart() {
         if (tapStart._busy) return;
         tapStart._busy = true;
         setTimeout(function () { tapStart._busy = false; }, 400);
         if (typeof window.startGame === 'function') window.startGame();
         else window.__pendingStart = true;
       }
-      function bindTap(id, handler) {
+      function bindTap(id) {
         var el = document.getElementById(id);
         if (!el) return;
-        el.addEventListener('pointerup', handler);
-        el.addEventListener('click', handler);
+        el.addEventListener('click', tapStart);
+        el.addEventListener('touchend', function (event) {
+          if (event.cancelable) event.preventDefault();
+          tapStart();
+        });
       }
-      bindTap('play-btn', tapStart);
-      bindTap('retry-btn', tapStart);
+      bindTap('play-btn');
+      bindTap('retry-btn');
     </script>
   </body>
 </html>
