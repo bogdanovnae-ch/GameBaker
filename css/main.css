@@ -279,6 +279,93 @@ h2 {
   color: var(--chocolate);
 }
 
+#hurt-flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9;
+  opacity: 0;
+  box-shadow: inset 0 0 0 16px rgba(210, 36, 48, 0.92);
+}
+
+#hurt-flash.on {
+  animation: hurt-flash 0.5s ease-out;
+}
+
+@keyframes hurt-flash {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+html.is-desktop #mobile-controls,
+html.is-desktop #app[data-state="playing"] #mobile-controls,
+html.is-desktop #app[data-state="paused"] #mobile-controls {
+  display: none !important;
+}
+
+.rules {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #8a5a32;
+}
+
+.pc-help {
+  display: none;
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  background: rgba(255, 248, 236, 0.7);
+  border: 2px solid #e2c49a;
+  border-radius: 12px;
+  text-align: left;
+}
+
+html.is-desktop .pc-help {
+  display: block;
+}
+
+html.is-desktop .chef-preview {
+  width: 72px;
+  height: 92px;
+  margin: 4px auto 8px;
+}
+
+html.is-desktop .panel {
+  width: min(400px, 92vw);
+}
+
+.help-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--chocolate);
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.help-keys {
+  list-style: none;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #6d3e22;
+}
+
+.help-keys b {
+  display: inline-block;
+  min-width: 1.2em;
+  padding: 0 5px;
+  margin: 0 1px;
+  background: #fff8ec;
+  border: 2px solid var(--chocolate);
+  border-radius: 6px;
+  font-size: 12px;
+}
+
 @media (max-height: 430px) {
   #hud {
     min-height: 36px;
@@ -293,5 +380,15 @@ h2 {
     height: 48px;
     min-height: 44px;
     font-size: 26px;
+  }
+
+  .chef-preview {
+    width: 72px;
+    height: 90px;
+    margin: 4px auto 6px;
+  }
+
+  .rules {
+    font-size: 12px;
   }
 }

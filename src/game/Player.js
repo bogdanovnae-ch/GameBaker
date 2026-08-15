@@ -1,4 +1,5 @@
 import { POSE_ANIM_DURATION, PLAYER_HEIGHTS, PLAYER_SIDES, WORLD } from '../config/constants.js';
+import { DISPLAY } from '../config/display.js';
 import { PLAYER_POSES, poseIdFromAxes } from '../config/positions.js';
 
 export class Player {
@@ -13,6 +14,7 @@ export class Player {
       facing: -1,
       lean: 0,
     };
+    this.caught = [];
     this._snapVisual();
   }
 
@@ -27,7 +29,16 @@ export class Player {
   reset() {
     this.side = PLAYER_SIDES.LEFT;
     this.height = PLAYER_HEIGHTS.LOWER;
+    this.caught = [];
     this._snapVisual();
+  }
+
+  addCaught(typeId) {
+    this.caught.push({
+      id: typeId,
+      wobble: Math.random() * Math.PI * 2,
+    });
+    if (this.caught.length > DISPLAY.maxBasketItems) this.caught.shift();
   }
 
   setSide(side) {

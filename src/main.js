@@ -5,6 +5,7 @@ import { UI } from './ui/UI.js';
 import { Controls } from './ui/Controls.js';
 import { watchViewport } from './ui/viewport.js';
 import { preventPageScroll } from './ui/input.js';
+import { applyDeviceClass } from './config/display.js';
 
 function showBootError(error) {
   const title = document.querySelector('#start-screen h1');
@@ -20,6 +21,7 @@ function showBootError(error) {
 }
 
 async function boot() {
+  applyDeviceClass();
   preventPageScroll();
 
   const canvas = document.getElementById('game-canvas');
@@ -41,6 +43,7 @@ async function boot() {
   if (window.__pendingStart) game.start();
 
   watchViewport(function () {
+    applyDeviceClass();
     renderer.fit();
   });
 }

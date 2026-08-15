@@ -7,6 +7,11 @@ const DRAWERS = {
   cupcake: drawCupcake,
   croissant: drawCroissant,
   cake: drawCake,
+  soap: drawSoap,
+  sponge: drawSponge,
+  bolt: drawBolt,
+  sock: drawSock,
+  battery: drawBattery,
 };
 
 export function drawDessert(ctx, typeId, x, y, rotation, scale = 1) {
@@ -154,4 +159,94 @@ function drawCake(ctx) {
   ctx.fill();
   ctx.fillStyle = '#3fa35a';
   ctx.fillRect(2, -18, 4, 6);
+}
+
+function drawSoap(ctx) {
+  ctx.fillStyle = '#9fd8f2';
+  roundRect(ctx, -16, -8, 32, 16, 6);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  roundRect(ctx, -12, -5, 14, 5, 3);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.beginPath();
+  ctx.arc(-10, -14, 5, 0, Math.PI * 2);
+  ctx.arc(-2, -18, 3.5, 0, Math.PI * 2);
+  ctx.arc(6, -13, 4, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawSponge(ctx) {
+  ctx.fillStyle = '#e8c84a';
+  roundRect(ctx, -15, -10, 30, 20, 4);
+  ctx.fill();
+  ctx.fillStyle = '#c9a322';
+  [[-8, -4], [4, -2], [-2, 4], [8, 5], [-10, 6]].forEach(([x, y]) => {
+    ctx.beginPath();
+    ctx.arc(x, y, 2.4, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function drawBolt(ctx) {
+  ctx.fillStyle = '#8a93a0';
+  ctx.beginPath();
+  ctx.moveTo(-6, -14);
+  ctx.lineTo(6, -14);
+  ctx.lineTo(4, -8);
+  ctx.lineTo(-4, -8);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = '#6d7582';
+  roundRect(ctx, -4, -8, 8, 22, 2);
+  ctx.fill();
+  ctx.strokeStyle = '#4c535c';
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(-4, -2);
+  ctx.lineTo(4, -2);
+  ctx.moveTo(-4, 4);
+  ctx.lineTo(4, 4);
+  ctx.moveTo(-4, 10);
+  ctx.lineTo(4, 10);
+  ctx.stroke();
+}
+
+function drawSock(ctx) {
+  ctx.fillStyle = '#5b7cbf';
+  ctx.beginPath();
+  ctx.moveTo(-6, -16);
+  ctx.lineTo(6, -16);
+  ctx.lineTo(7, 4);
+  ctx.quadraticCurveTo(16, 8, 14, 14);
+  ctx.quadraticCurveTo(4, 18, -2, 12);
+  ctx.lineTo(-7, 4);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = '#f4f0e6';
+  ctx.fillRect(-6, -16, 12, 5);
+  ctx.strokeStyle = '#f4d76a';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(-5, -6);
+  ctx.lineTo(6, -6);
+  ctx.moveTo(-5, 2);
+  ctx.lineTo(6, 2);
+  ctx.stroke();
+}
+
+function drawBattery(ctx) {
+  ctx.fillStyle = '#d8dde4';
+  roundRect(ctx, -8, -16, 16, 30, 3);
+  ctx.fill();
+  ctx.fillStyle = '#d94f6d';
+  roundRect(ctx, -8, -16, 16, 10, 3);
+  ctx.fill();
+  ctx.fillStyle = '#bfc5ce';
+  roundRect(ctx, -4, -20, 8, 6, 2);
+  ctx.fill();
+  ctx.fillStyle = '#3b2414';
+  ctx.font = '700 10px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('+', 0, -8);
 }

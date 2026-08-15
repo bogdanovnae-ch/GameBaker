@@ -14,6 +14,11 @@ export const SPRITES = {
     cupcake: { src: null, image: null },
     croissant: { src: null, image: null },
     cake: { src: null, image: null },
+    soap: { src: null, image: null },
+    sponge: { src: null, image: null },
+    bolt: { src: null, image: null },
+    sock: { src: null, image: null },
+    battery: { src: null, image: null },
   },
 };
 

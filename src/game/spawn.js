@@ -1,4 +1,4 @@
-import { pickWeightedDessert } from '../config/desserts.js';
+import { pickSpawnItem } from '../config/desserts.js';
 import { Dessert } from './Dessert.js';
 
 export class SpawnController {
@@ -20,7 +20,7 @@ export class SpawnController {
     if (!trajectory) return null;
 
     this.timer = 0;
-    const type = pickWeightedDessert();
+    const type = pickSpawnItem(level);
     const speed = level.speed * (trajectory.speedMultiplier || 1);
     return new Dessert({ type, trajectory, speed });
   }

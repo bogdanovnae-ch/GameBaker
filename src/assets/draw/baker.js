@@ -1,10 +1,11 @@
 import { roundRect } from './scene.js';
 import { FLOOR_Y, WORLD } from '../../config/constants.js';
+import { drawDessert } from './desserts.js';
 
 const HIP_Y = 26;
 const SCALE = 1.38;
 
-export function drawBaker(ctx, { x, y, facing, basketX, basketY, time, scale = SCALE, lean = 0.1, poseHeight = 'upper' }) {
+export function drawBaker(ctx, { x, y, facing, basketX, basketY, time, scale = SCALE, lean = 0.1, poseHeight = 'upper', caughtItems = [] }) {
   const bob = poseHeight === 'upper' ? Math.sin(time * 3) * 1.1 : 0;
   const bodyY = y + bob;
   const floorY = FLOOR_Y * WORLD.height;
@@ -29,7 +30,7 @@ export function drawBaker(ctx, { x, y, facing, basketX, basketY, time, scale = S
   ctx.restore();
 
   drawCatchingArm(ctx, x, bodyY, basketX, basketY, facing, scale, poseHeight, lean);
-  drawBasket(ctx, basketX, basketY, facing, time);
+  drawBasket(ctx, basketX, basketY, facing, time, caughtItems);
 }
 
 function drawBakerShadow(ctx, footY, poseHeight) {
@@ -255,7 +256,7 @@ function drawCatchingArm(ctx, x, y, basketX, basketY, facing, scale, poseHeight,
   ctx.restore();
 }
 
-export function drawBasket(ctx, x, y, facing, time) {
+export function drawBasket(ctx, x, y, facing, time, caughtItems = []) {
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(facing * 0.08);
@@ -290,6 +291,23 @@ export function drawBasket(ctx, x, y, facing, time) {
     ctx.lineTo(i * 0.7, 16);
     ctx.stroke();
   }
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.ellipse(0, 4, 24, 10, 0, 0, Math.PI * 2);
+  ctx.clip();
+  const slots = [
+    { x: -10, y: 2 },
+    { x: 8, y: 1 },
+    { x: -2, y: 6 },
+    { x: 12, y: 7 },
+  ];
+  caughtItems.forEach((item, index) => {
+    const slot = slots[index % slots.length];
+    const wobble = Math.sin(time * 4 + (item.wobble || 0)) * 0.12;
+    drawDessert(ctx, item.id, slot.x, slot.y, wobble, 0.42);
+  });
+  ctx.restore();
 
   ctx.strokeStyle = '#dca056';
   ctx.lineWidth = 5;

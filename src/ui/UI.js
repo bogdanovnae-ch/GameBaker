@@ -11,6 +11,14 @@ export class UI {
     this.gameoverScreen = document.getElementById('gameover-screen');
     this.finalScoreEl = document.getElementById('final-score');
     this.pauseBtn = document.getElementById('pause-btn');
+    this.hurtFlash = document.getElementById('hurt-flash');
+  }
+
+  flashHurt(onDesktop) {
+    if (!onDesktop || !this.hurtFlash) return;
+    this.hurtFlash.classList.remove('on');
+    void this.hurtFlash.offsetWidth;
+    this.hurtFlash.classList.add('on');
   }
 
   sync(game) {

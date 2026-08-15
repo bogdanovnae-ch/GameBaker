@@ -7,17 +7,19 @@ export const LEVELS = [
     id: 1,
     name: 'Уровень 1',
     scoreThreshold: 0,
-    speed: 95,
-    spawnInterval: 1.85,
+    speed: 118,
+    spawnInterval: 1.7,
     maxConcurrent: 2,
+    hazardChance: 0.14,
   },
   {
     id: 2,
     name: 'Уровень 2',
     scoreThreshold: 120,
-    speed: 135,
-    spawnInterval: 1.25,
+    speed: 152,
+    spawnInterval: 1.15,
     maxConcurrent: 3,
+    hazardChance: 0.2,
   },
   {
     id: 3,
@@ -26,6 +28,7 @@ export const LEVELS = [
     speed: 175,
     spawnInterval: 0.9,
     maxConcurrent: 4,
+    hazardChance: 0.26,
   },
   {
     id: 4,
@@ -34,6 +37,7 @@ export const LEVELS = [
     speed: 215,
     spawnInterval: 0.7,
     maxConcurrent: 5,
+    hazardChance: 0.32,
   },
 ];
 

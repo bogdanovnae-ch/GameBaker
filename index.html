@@ -16,7 +16,7 @@
       href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/main.css?v=all1" />
+    <link rel="stylesheet" href="css/main.css?v=all2" />
     <script>
       (function () {
         var w = window.innerWidth || 320;
@@ -28,11 +28,18 @@
         var root = document.documentElement;
         root.style.setProperty('--app-width', Math.round(w) + 'px');
         root.style.setProperty('--app-height', Math.round(h) + 'px');
+        var touch = navigator.maxTouchPoints > 0;
+        var coarse = window.matchMedia('(pointer: coarse)').matches;
+        var shortSide = Math.min(screen.width, screen.height);
+        var isTouch = touch && (coarse || shortSide <= 1180);
+        root.classList.toggle('is-desktop', !isTouch);
+        root.classList.toggle('is-touch', isTouch);
       })();
     </script>
   </head>
   <body>
     <div id="app" data-state="start">
+      <div id="hurt-flash" aria-hidden="true"></div>
       <header id="hud">
         <div class="hud-group score-box">
           <span class="hud-label">Счёт</span>
@@ -120,6 +127,18 @@
               </g>
             </svg>
           </div>
+          <p class="rules">
+            Ловите вкусные ингредиенты корзиной. Мыло, губку, болт, носок и батарейку
+            ловить нельзя — за это теряется жизнь.
+          </p>
+          <div class="pc-help">
+            <p class="help-title">Управление</p>
+            <ul class="help-keys">
+              <li>Левая рука: <b>W</b> верх, <b>S</b> низ</li>
+              <li>Правая рука: <b>P</b> верх, <b>L</b> низ</li>
+              <li>Пауза: <b>Esc</b></li>
+            </ul>
+          </div>
           <button id="play-btn" class="primary-btn" type="button">Старт</button>
         </div>
       </section>
@@ -141,7 +160,7 @@
       </section>
     </div>
 
-    <script type="module" src="src/main.js?v=all1"></script>
+    <script type="module" src="src/main.js?v=all2"></script>
     <script nomodule>
       document.getElementById('play-btn').textContent = 'Нужен новый браузер';
     </script>

@@ -86,6 +86,7 @@ export class Renderer {
       time: game.time,
       lean: visual.lean,
       poseHeight: game.player.height,
+      caughtItems: game.player.caught,
     });
   }
 

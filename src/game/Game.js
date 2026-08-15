@@ -1,18 +1,18 @@
 import { GAME_STATES, INITIAL_LIVES } from '../config/constants.js';
 import { getLevelForScore } from '../config/levels.js';
 import { getWorldTrajectories } from '../config/trajectories.js';
+import { isEdible } from '../config/desserts.js';
+import { usesTouchControls } from '../config/display.js';
 import { Player } from './Player.js';
 import { SpawnController } from './spawn.js';
 import { canCatchDessert } from './collision.js';
 import { AudioManager } from '../audio/AudioManager.js';
-import { SOUND_FILES } from '../config/sounds.js';
 
 export class Game {
   constructor({ renderer, ui }) {
     this.renderer = renderer;
     this.ui = ui;
     this.audio = new AudioManager();
-    this.audio.load(SOUND_FILES);
     this.trajectories = getWorldTrajectories();
     this.player = new Player();
     this.spawner = new SpawnController(this.trajectories);
@@ -57,6 +57,7 @@ export class Game {
     if (this.state === GAME_STATES.PLAYING) {
       this.state = GAME_STATES.PAUSED;
       this.controlsEnabled = false;
+      this.audio.stopMusic();
       this.ui.sync(this);
       this._relayout();
       return;
@@ -65,6 +66,7 @@ export class Game {
       this.state = GAME_STATES.PLAYING;
       this.controlsEnabled = true;
       this.lastTime = performance.now();
+      this.audio.startMusic();
       this.ui.sync(this);
       this._relayout();
     }
@@ -141,8 +143,25 @@ export class Game {
 
   _catch(dessert) {
     dessert.catch();
-    this.score += dessert.type.points;
     const pos = dessert.getPosition();
+    if (!isEdible(dessert.type)) {
+      this.effects.push({
+        kind: 'text',
+        text: 'Фу!',
+        x: pos.x,
+        y: pos.y - 18,
+        vx: 0,
+        vy: -40,
+        age: 0,
+        life: 0.7,
+      });
+      this._burst(pos.x, pos.y, ['#8a93a0', '#d94f6d', '#6d7582']);
+      this._loseLife();
+      return;
+    }
+
+    this.player.addCaught(dessert.type.id);
+    this.score += dessert.type.points;
     this.effects.push({
       kind: 'text',
       text: `+${dessert.type.points}`,
@@ -159,11 +178,19 @@ export class Game {
 
   _miss(dessert) {
     dessert.miss();
-    this.lives = Math.max(0, this.lives - 1);
     const pos = dessert.getPosition();
     this._burst(pos.x, pos.y, ['#c9843a', '#8a4f1e', '#f3d18a']);
-    this.audio.play('miss');
+    if (!isEdible(dessert.type)) return;
+    this._loseLife();
+  }
+
+  _loseLife() {
+    this.lives = Math.max(0, this.lives - 1);
     this.audio.play('lifeLost');
+    this.ui.flashHurt(!usesTouchControls());
+    if (usesTouchControls() && navigator.vibrate) {
+      navigator.vibrate([70, 40, 140]);
+    }
     if (this.lives <= 0) this._gameOver();
   }
 
