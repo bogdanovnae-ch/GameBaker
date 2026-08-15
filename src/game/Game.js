@@ -7,6 +7,7 @@ import { Player } from './Player.js';
 import { SpawnController } from './spawn.js';
 import { canCatchDessert } from './collision.js';
 import { AudioManager } from '../audio/AudioManager.js';
+import { hapticLifeLost, primeHaptics } from '../ui/haptics.js';
 
 export class Game {
   constructor({ renderer, ui }) {
@@ -49,6 +50,7 @@ export class Game {
     this.controlsEnabled = true;
     this.lastTime = performance.now();
     this.audio.startMusic();
+    primeHaptics();
     this.ui.sync(this);
     this._relayout();
   }
@@ -188,9 +190,7 @@ export class Game {
     this.lives = Math.max(0, this.lives - 1);
     this.audio.play('lifeLost');
     this.ui.flashHurt(!usesTouchControls());
-    if (usesTouchControls() && navigator.vibrate) {
-      navigator.vibrate([70, 40, 140]);
-    }
+    hapticLifeLost();
     if (this.lives <= 0) this._gameOver();
   }
 

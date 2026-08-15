@@ -1,3 +1,5 @@
+import { primeHaptics } from './haptics.js';
+
 function isInteractiveTarget(target) {
   let node = target;
   while (node && node !== document.body && node !== document.documentElement) {
@@ -50,6 +52,11 @@ export function bindPress(el, handler) {
     const now = Date.now();
     if (now - last < 70) return;
     last = now;
+    try {
+      primeHaptics();
+    } catch (err) {
+      /* ignore */
+    }
     handler(event);
   };
   if (window.PointerEvent) {
