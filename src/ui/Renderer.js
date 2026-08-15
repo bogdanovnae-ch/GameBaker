@@ -6,6 +6,7 @@ import { drawBackground, drawCatchSlots, drawChutes } from '../assets/draw/scene
 import { drawBaker } from '../assets/draw/baker.js';
 import { drawDessert } from '../assets/draw/desserts.js';
 import { applyViewport } from './viewport.js';
+import { usesTouchControls } from '../config/display.js';
 
 export class Renderer {
   constructor(canvas) {
@@ -21,10 +22,19 @@ export class Renderer {
 
   fit() {
     applyViewport();
-    const parent = this.canvas.parentElement;
-    const rect = parent && parent.getBoundingClientRect ? parent.getBoundingClientRect() : null;
-    const maxW = (rect && rect.width) || window.innerWidth || 320;
-    const maxH = (rect && rect.height) || window.innerHeight || 180;
+    const touch = usesTouchControls();
+    let maxW;
+    let maxH;
+    if (touch) {
+      const vv = window.visualViewport;
+      maxW = (vv && vv.width) || window.innerWidth || 320;
+      maxH = (vv && vv.height) || window.innerHeight || 180;
+    } else {
+      const parent = this.canvas.parentElement;
+      const rect = parent && parent.getBoundingClientRect ? parent.getBoundingClientRect() : null;
+      maxW = (rect && rect.width) || window.innerWidth || 320;
+      maxH = (rect && rect.height) || window.innerHeight || 180;
+    }
     const scale = Math.min(maxW / WORLD.width, maxH / WORLD.height);
     const cssW = Math.max(DISPLAY.minCanvas, Math.floor(WORLD.width * scale));
     const cssH = Math.max(DISPLAY.minCanvas, Math.floor(WORLD.height * scale));

@@ -16,7 +16,7 @@
       href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/main.css?v=all2" />
+    <link rel="stylesheet" href="css/main.css?v=all3" />
     <script>
       (function () {
         var w = window.innerWidth || 320;
@@ -34,6 +34,7 @@
         var isTouch = touch && (coarse || shortSide <= 1180);
         root.classList.toggle('is-desktop', !isTouch);
         root.classList.toggle('is-touch', isTouch);
+        root.classList.toggle('is-landscape', w > h);
       })();
     </script>
   </head>
@@ -160,7 +161,7 @@
       </section>
     </div>
 
-    <script type="module" src="src/main.js?v=all2"></script>
+    <script type="module" src="src/main.js?v=all3"></script>
     <script nomodule>
       document.getElementById('play-btn').textContent = 'Нужен новый браузер';
     </script>

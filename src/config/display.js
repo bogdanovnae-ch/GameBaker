@@ -14,7 +14,15 @@ export function usesTouchControls() {
 
 export function applyDeviceClass() {
   const desktop = !usesTouchControls();
+  const width = window.visualViewport && window.visualViewport.width
+    ? window.visualViewport.width
+    : window.innerWidth;
+  const height = window.visualViewport && window.visualViewport.height
+    ? window.visualViewport.height
+    : window.innerHeight;
+  const landscape = width > height;
   document.documentElement.classList.toggle('is-desktop', desktop);
   document.documentElement.classList.toggle('is-touch', !desktop);
+  document.documentElement.classList.toggle('is-landscape', landscape);
   return desktop;
 }
